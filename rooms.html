@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Room Viewer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 10px;
+            background-color: #f8f9fa;
+            flex: 0 0 auto;
+        }
+
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .panel {
+            flex: 1;
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            min-height: 0;
+        }
+
+        .panel-content {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            min-height: 0;
+        }
+
+        .form-column {
+            width: 250px;
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .image-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .form-carousel {
+            width: 200px;
+            margin-top: auto;
+        }
+
+        .image-carousel {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+        }
+
+        .image-carousel .carousel-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .image-carousel .carousel-item {
+            height: 100%;
+        }
+
+        .image-carousel img {
+            max-height: 100%;
+            max-width: 100%;
+            margin: auto;
+            object-fit: contain;
+        }
+
+        .form-carousel img {
+            width: 200px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .button-container {
+            padding: 10px 0;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex: 0 0 auto;
+        }
+
+        select.form-control,
+        input.form-control {
+            width: 200px;
+        }
+
+        .image-carousel .carousel-control-prev-icon,
+        .image-carousel .carousel-control-next-icon {
+            background-color: rgba(0, 0, 0, 0.5); /* Makes the controls more visible */
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .carousel-item {
+            cursor: pointer;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            cursor: pointer;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <div class="header">
+        <h1 class="text-center">Hotel Room Viewer</h1>
+    </div>
+
+    <div class="content-container">
+        <!-- Panel 1 -->
+        <div class="panel">
+            <div class="panel-content">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="citySelect1">Select City:</label>
+                        <select class="form-control" id="citySelect1"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hotelSearch1">Search Hotels:</label>
+                        <input type="text" class="form-control" id="hotelSearch1">
+                    </div>
+                    <div class="form-group">
+                        <label for="hotelSelect1">Select Hotel:</label>
+                        <select class="form-control" id="hotelSelect1"></select>
+                    </div>
+                    <div id="roomCarousel1" class="carousel slide form-carousel">
+                        <div class="carousel-inner"></div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#roomCarousel1" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#roomCarousel1" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="image-column">
+                    <div id="imageCarousel1" class="carousel slide image-carousel">
+                        <div class="carousel-inner"></div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel1" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel1" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                    <div class="button-container" id="buttonContainer1" style="display: none;">
+                        <button class="btn btn-primary move-btn">Move</button>
+                        <button class="btn btn-danger delete-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel 2 -->
+        <div class="panel">
+            <div class="panel-content">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="citySelect2">Select City:</label>
+                        <select class="form-control" id="citySelect2"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hotelSearch2">Search Hotels:</label>
+                        <input type="text" class="form-control" id="hotelSearch2">
+                    </div>
+                    <div class="form-group">
+                        <label for="hotelSelect2">Select Hotel:</label>
+                        <select class="form-control" id="hotelSelect2"></select>
+                    </div>
+                    <div id="roomCarousel2" class="carousel slide form-carousel">
+                        <div class="carousel-inner"></div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#roomCarousel2" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#roomCarousel2" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="image-column">
+                    <div id="imageCarousel2" class="carousel slide image-carousel">
+                        <div class="carousel-inner"></div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel2" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel2" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                    <div class="button-container" id="buttonContainer2" style="display: none;">
+                        <button class="btn btn-primary move-btn">Move</button>
+                        <button class="btn btn-danger delete-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="ajax/ajax.js"></script>
+<script>
+    class HotelPanel {
+        constructor(panelId, otherPanelId) {
+            this.panelId = panelId;
+            this.otherPanelId = otherPanelId;
+            this.citySelect = $(`#citySelect${panelId}`);
+            this.hotelSearch = $(`#hotelSearch${panelId}`);
+            this.hotelSelect = $(`#hotelSelect${panelId}`);
+            this.roomCarousel = $(`#roomCarousel${panelId}`);
+            this.imageCarousel = $(`#imageCarousel${panelId}`);
+            this.buttonContainer = $(`#buttonContainer${panelId}`);
+            this.hotelData = [];
+            this.currentRoomId = null;
+            this.currentImageId = null;
+
+            this.initializeEventListeners();
+            this.loadCities();
+
+            // Add a flag to identify if this is the top panel
+            this.isTopPanel = (panelId === 1);
+
+            // Add property to track if change is from sync
+            this.isSyncing = false;
+
+        }
+
+        async loadCities() {
+            try {
+                const cities = await hotelAjax('ajax_get_cities.php', []);
+                this.citySelect.empty().append('<option value="">Select a city</option>');
+                cities.forEach(city => {
+                    this.citySelect.append(`<option value="${city.id}">${city.name}</option>`);
+                });
+
+                // Auto-select Las Vegas (id=1)
+                this.citySelect.val("1").trigger('change');
+            } catch (error) {
+                console.error('Error loading cities:', error);
+            }
+        }
+
+        async loadHotels(cityId) {
+            try {
+                this.hotelData = await hotelAjax('ajax_get_hotels.php', [{city_id: cityId}]);
+                this.updateHotelSelect(this.hotelData);
+
+                // If this is top panel changing city, sync the bottom panel
+                if (this.isTopPanel && !this.isSyncing) {
+                    const otherPanel = window[`panel${this.otherPanelId}`];
+                    otherPanel.isSyncing = true;
+                    otherPanel.citySelect.val(cityId).trigger('change');
+                    otherPanel.isSyncing = false;
+                }
+            } catch (error) {
+                console.error('Error loading hotels:', error);
+            }
+
+        }
+
+        updateHotelSelect(hotels) {
+            this.hotelSelect.empty().append('<option value="">Select a hotel</option>');
+            hotels.forEach(hotel => {
+                this.hotelSelect.append(`<option value="${hotel.id}">${hotel.name}</option>`);
+            });
+        }
+
+        async loadRooms(hotelId) {
+            try {
+                const rooms = await hotelAjax('ajax_get_rooms.php', [{hotel_id: hotelId}]);
+                this.updateRoomCarousel(rooms);
+            } catch (error) {
+                console.error('Error loading rooms:', error);
+            }
+        }
+
+        async loadRoomImages(roomId) {
+            try {
+                const images = await hotelAjax('ajax_get_room_images.php', [{room_id: roomId}]);
+                this.updateImageCarousel(images);
+            } catch (error) {
+                console.error('Error loading room images:', error);
+            }
+        }
+
+        updateRoomCarousel(rooms) {
+            const carouselInner = this.roomCarousel.find('.carousel-inner');
+            carouselInner.empty();
+
+            rooms.forEach((room, index) => {
+                const active = index === 0 ? 'active' : '';
+                const imageUrl = `show_image.php?image_id=${room.image_id}&width=200`;
+                carouselInner.append(`
+                        <div class="carousel-item ${active}" data-room-id="${room.room_id}">
+                            <img src="${imageUrl}" class="d-block w-100" alt="Room">
+                        </div>
+                    `);
+            });
+
+            if (rooms.length > 0) {
+                this.currentRoomId = rooms[0].room_id;
+            }
+        }
+
+        updateImageCarousel(images) {
+            const carouselInner = this.imageCarousel.find('.carousel-inner');
+            carouselInner.empty();
+
+            if (images.length === 0) {
+                this.buttonContainer.hide();
+                return;
+            }
+
+            images.forEach((image, index) => {
+                const active = index === 0 ? 'active' : '';
+                const imageUrl = `show_image.php?image_id=${image.image_id}`;
+                carouselInner.append(`
+                        <div class="carousel-item ${active}" data-image-id="${image.image_id}">
+                            <img src="${imageUrl}" class="d-block" alt="Image">
+                        </div>
+                    `);
+            });
+
+            this.currentImageId = images[0]?.image_id;
+
+            // Only show buttons if both panels have images
+            const otherPanel = window[`panel${this.otherPanelId}`];
+            if (otherPanel.currentRoomId) {
+                this.buttonContainer.show();
+            }
+        }
+
+        filterHotels(searchTerm) {
+            const filteredHotels = this.hotelData.filter(hotel =>
+                hotel.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            this.updateHotelSelect(filteredHotels);
+        }
+
+        async moveImage() {
+            if (!this.currentImageId) return;
+
+            const otherPanel = window[`panel${this.otherPanelId}`];
+            if (!otherPanel.currentRoomId) return;
+
+            try {
+                console.log('Moving image:', this.currentImageId, 'to room:', otherPanel.currentRoomId);
+                await hotelAjax('ajax_update_image.php', [
+                    { id: this.currentImageId },
+                    { room_id: otherPanel.currentRoomId }
+                ]);
+
+                // Refresh both panels
+                if (this.currentRoomId) this.loadRoomImages(this.currentRoomId);
+                if (otherPanel.currentRoomId) otherPanel.loadRoomImages(otherPanel.currentRoomId);
+            } catch (error) {
+                console.error('Error moving image:', error);
+            }
+        }
+
+        async deleteImage() {
+            if (!this.currentImageId) return;
+
+            try {
+                console.log('Deleting image:', this.currentImageId);
+                await hotelAjax('ajax_delete_image.php', [
+                    { id: this.currentImageId }
+                ]);
+
+                if (this.currentRoomId) this.loadRoomImages(this.currentRoomId);
+            } catch (error) {
+                console.error('Error deleting image:', error);
+            }
+        }
+
+        initializeEventListeners() {
+            this.citySelect.on('change', (e) => {
+                const cityId = e.target.value;
+                if (cityId) this.loadHotels(cityId);
+            });
+
+            this.hotelSearch.on('input', (e) => {
+                this.filterHotels(e.target.value);
+            });
+
+            this.hotelSelect.on('change', (e) => {
+                const hotelId = e.target.value;
+                if (hotelId) this.loadRooms(hotelId);
+
+                // If this is top panel selecting hotel, sync the bottom panel
+                if (this.isTopPanel && !this.isSyncing) {
+                    const otherPanel = window[`panel${this.otherPanelId}`];
+                    otherPanel.isSyncing = true;
+                    otherPanel.hotelSelect.val(hotelId).trigger('change');
+                    otherPanel.isSyncing = false;
+                }
+
+            });
+
+            this.roomCarousel.on('click', '.carousel-item', (e) => {
+                const roomId = $(e.currentTarget).data('room-id');
+                this.currentRoomId = roomId;
+                if (roomId) this.loadRoomImages(roomId);
+            });
+
+            this.buttonContainer.find('.move-btn').on('click', () => this.moveImage());
+            this.buttonContainer.find('.delete-btn').on('click', () => this.deleteImage());
+
+            this.imageCarousel.on('slid.bs.carousel', (e) => {
+                this.currentImageId = $(e.relatedTarget).data('image-id');
+            });
+        }
+    }
+
+    let panel1, panel2;
+
+    $(document).ready(() => {
+        panel1 = new HotelPanel(1, 2);
+        panel2 = new HotelPanel(2, 1);
+        window.panel1 = panel1;
+        window.panel2 = panel2;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+I need an html file that:
+Uses bootstrap.
+For any ajax calls, uses the function hotelAjax in /ajax/ajax.js.
+Please note that the function takes two parameters: the path to the ajax file and an array of objects as parameters. Also, it returns a promise that resolves on the json data returned from the ajax call. Use .then syntax, NOT await!
+Excepts the following parameters on the URL:
+    hotel_id - the id of the hotel.
+    room_id - (optional) the id of the room.
+Calls ajax_get_hotel.php to get the details about the hotel.
+Has a title at the top of the name of the hotel (from ajax_get_hotel.php).
+Calls ajax_get_rooms.php to get a list of rooms for the hotel.
+Has a strip across the top under the title with an image for each hotel room, listed horizontally. Use /show_image.php to get the images. The images should be thumbnails (150px wide). The number of images for the room should be overlaid over the top of each image.
+If the room image matches the optional room_id parameter, it should have a bright border around it.
+The room images should be clickable, with the url being the snip.html file, with the parameters being hotel_id and room_id.

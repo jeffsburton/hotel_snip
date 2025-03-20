@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Cities, Hotels, and Images</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>Select City, Hotel, and Image Type to Upload an Image</h1>
+
+<!-- Dropdowns for cities and hotels -->
+<label for="cities">Select City:</label>
+<select id="cities">
+    <option value="">-- Select a city --</option>
+</select>
+
+<br><br>
+
+<label for="hotels">Select Hotel:</label>
+<select id="hotels" disabled>
+    <option value="">-- Select a hotel --</option>
+</select>
+
+<br><br>
+
+<!-- Radio buttons for image types -->
+<div id="image_types_container">
+    <h3>Select Image Type</h3>
+    <div id="image_types">
+        <!-- Radio buttons will be dynamically inserted here -->
+    </div>
+</div>
+
+<br><br>
+
+<!-- File upload section -->
+<div id="upload_container">
+    <h3>Upload an Image</h3>
+    <input type="file" id="image_file" multiple disabled>
+    <button id="upload_button" disabled>Upload</button>
+</div>
+
+<br><br>
+
+<!-- Container for displaying images -->
+<div id="images">
+    <h3>Images</h3>
+    <!-- Images will be dynamically inserted here -->
+</div>
+
+<script>
+    $(document).ready(function () {
+        let selectedCityId = null;
+        let selectedHotelId = null;
+        let selectedImageTypeId = null;
+
+        // Function to fetch the list of cities
+        function fetchCities() {
+            $.ajax({
+                url: 'ajax_get_cities.php',
+                method: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success && response.data) {
+                        let citiesSelect = $('#cities');
+                        citiesSelect.empty(); // Clear any existing options
+                        citiesSelect.append('<option value="">-- Select a city --</option>');
+                        response.data.forEach(function (city) {
+                            citiesSelect.append(`<option value="${city.id}">${city.name}</option>`);
+
+                        });
+                        $(citiesSelect).val(response.data[0].id).change();
+
+                    } else {
+                        alert('No cities found!');
+                    }
+                },
+                error: function () {
+                    alert('Failed to fetch cities!');
+                }
+            });
+        }
+
+        // Function to fetch the list of image types
+        function fetchImageTypes() {
+            $.ajax({
+                url: 'ajax_get_image_types.php',
+                method: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success && response.data) {
+                        let imageTypesDiv = $('#image_types');
+                        imageTypesDiv.empty(); // Clear any existing radio buttons
+                        response.data.forEach(function (type) {
+                            const radioButton = `
+                                    <label>
+                                        <input type="radio" name="image_type" value="${type.id}">
+                                        ${type.name}
+                                    </label><br>
+                                `;
+                            imageTypesDiv.append(radioButton);
+                        });
+
+                        // Add event listener for radio buttons
+                        imageTypesDiv.find('input[name="image_type"]').change(function () {
+                            selectedImageTypeId = $(this).val();
+                            checkUploadConditions();
+                        });
+                        $('input[name="image_type"][value="1"]').trigger('click');
+                    } else {
+                        alert('No image types found!');
+                    }
+                },
+                error: function () {
+                    alert('Failed to fetch image types!');
+                }
+            });
+        }
+
+        // Function to check if the upload button should be enabled
+        function checkUploadConditions() {
+            const isReady = selectedCityId && selectedHotelId && selectedImageTypeId;
+            $('#image_file').prop('disabled', !isReady);
+            $('#upload_button').prop('disabled', !isReady);
+        }
+
+        // Event listener for city select changes to fetch hotels
+        $('#cities').change(function () {
+            selectedCityId = $(this).val();
+            selectedHotelId = null; // Reset hotel selection
+            $('#hotels').empty().append('<option value="">-- Select a hotel --</option>'); // Reset hotels dropdown
+            $('#images').empty(); // Clear images container
+            $('#image_file').prop('disabled', true); // Disable file input
+            $('#upload_button').prop('disabled', true); // Disable upload button
+            checkUploadConditions();
+            if (selectedCityId) {
+                $.ajax({
+                    url: 'ajax_get_hotels.php',
+                    method: 'GET',
+                    data: { city_id: selectedCityId },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success && response.data) {
+                            $('#hotels').prop('disabled', false); // Enable hotels dropdown
+                            response.data.forEach(function (hotel) {
+                                $('#hotels').append(`<option value="${hotel.id}">${hotel.name}</option>`);
+                            });
+                        } else {
+                            alert('No hotels found for the selected city.');
+                        }
+                    },
+                    error: function () {
+                        alert('Failed to fetch hotels!');
+                    }
+                });
+            } else {
+                $('#hotels').prop('disabled', true);
+            }
+        });
+
+        // Event listener for hotel select changes
+        $('#hotels').change(function () {
+            selectedHotelId = $(this).val();
+            checkUploadConditions();
+        });
+
+        // Handle file upload on button click
+        $('#upload_button').click(function () {
+            const fileInput = $('#image_file')[0];
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('hotel_id', selectedHotelId);
+            formData.append('image_type_id', selectedImageTypeId);
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('files[]', fileInput.files[i]);
+            }
+
+
+            $.ajax({
+                url: 'ajax_upload_image.php',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    if (response.success) {
+                        alert('Image uploaded successfully!');
+                        $('#image_file').val(''); // Reset file input
+                    } else {
+                        alert('Failed to upload image: ' + response.message);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                    alert('An error occurred while uploading the image.');
+                }
+            });
+        });
+
+        // Initialize by fetching all cities and image types
+        fetchCities();
+        fetchImageTypes();
+    });
+</script>
+</body>
+</html>

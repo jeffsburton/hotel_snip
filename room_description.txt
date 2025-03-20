@@ -1,0 +1,36 @@
+I need an html/javascript file. It should use jquery and bootstrap. It will also be dependent on a file in the project ajax/ajax.js, which contains a function hotelAjax, will works like this:
+The first parameter is the server ajax script. The second parameter is an array of post parameters, each element of the array is an object, and the key value pairs are passed as post parameters. The function returns a promise which resolves to the data returned from the function.
+The page should be divided using flex. There should be a row across the top containing a title. The rest of the page should be two rows, with the space evenly divided between them.
+Each of the two bottom panels should have identical functionalty. Each are divided into two columns.
+The first column has a form which consists of:
+* a select with a list of city names and id's
+* a search box for searching hotel names.
+* a select with a list of hotel names and hotel id's.
+* A bootstrap image carousel. This should be no wider than 200 pixels.
+This form, including the carousels, shoudld be stacked in a single column, and the panel should take up no more than 250pixels.
+The city select should be populated at startup by the ajax script ajax_get_cities.php, which returns an array of
+{id: "city id", name: "city name"}.
+When the city select is changed, the hotel select should be populated withe ajax_get_hotels.php, which returns
+an array of {id: "hotel id", name: "hotel id"}.
+As the user types in the search box, the hotel select options should narrow based on what is typed and which
+hotel names are matched.
+When the hotel select is changed, the room carousel should be populated with ajax_get_rooms.php, which returns an
+arrow of {room_id: "room id", image_id: "image id"}. The image url's take the form show_image.php?image_id=[image_id]&width=200.
+
+
+The second column should take up the remaining space and never a horizontal scrollbar, and will contain an image carousel for the room images.
+This carousel should fit in the panel vertically, and leave enough room under it for two buttons. There should never be any scrolling in this
+panel.
+If the user clicks on an image in the room carousel on the right, the image carousel should populate from the script
+ajax_get_room_images.php, which takes a parameter room_id and returns a list of {image_id: "image id"}. The images in the
+carousel also use show_image.php?image_id={image_id} but with no width parameter.
+
+Once the carousels in the second panel is populated (both top and bottom), two buttons should appear side-by-side under it.
+The first's title is "move" and the second is "delete".
+If the move button is pressed, the ajax script ajax_update_image.php should be called with the parameters "id" and "room_id".
+The id comes from the image_id of the image in the carousel. room_id is the room_id being viewed in the opposite panel (top or bottom).
+If the delete button is pressed, the ajax script ajax_delete_image.php is called. It takes a single parameter "id", which is the image_id
+of the image in the corresponding carousel.
+
+Once the page has been initialized (and cities have been loaded), the city of las vegas (id=1) should
+automatically be selected in both city selects.

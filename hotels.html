@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotels with Unsnipped Images</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="ajax/ajax.js"></script>
+    <script>
+        // Function to fetch hotel data and populate the list
+        document.addEventListener("DOMContentLoaded", function () {
+            // Using hotelAjax to call the PHP function
+            hotelAjax("ajax_get_hotels_with_unsnipped_images.php", [{image_type_id: 1}]).then(function (response) {
+                // Parse the response to retrieve the array or log errors
+                const hotels = response; // Assuming the response is already in JSON format (an array of objects)
+
+                // Find the container where the list will be added
+                const listContainer = document.getElementById('hotels-list');
+
+                if (hotels && Array.isArray(hotels)) {
+                    // Loop through the array and create Bootstrap list elements
+                    hotels.forEach(hotel => {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'list-group-item'; // Add Bootstrap styling
+
+                        // Create a hyperlink for the hotel name
+                        const link = document.createElement('a');
+                        link.href = `snip.html?hotel_id=${hotel.id}`;
+                        link.textContent = hotel.name; // Use hotel name as link text
+                        link.className = 'text-decoration-none'; // Styling for link
+
+                        // Append the link to the list item
+                        listItem.appendChild(link);
+
+                        // Add the list item to the list container
+                        listContainer.appendChild(listItem);
+                    });
+                } else {
+                    // If no valid response, display an error message
+                    listContainer.textContent = "No hotels found.";
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Hotels with Unsnipped Images</h1>
+    <ul id="hotels-list" class="list-group">
+        <!-- Dynamic content will be appended here -->
+    </ul>
+</div>
+</body>
+</html>

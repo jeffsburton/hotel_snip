@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="ajax/ajax.js"></script>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="main.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container my-4">
+        <div class="row mb-3">
+            <button type="button" class="btn btn-secondary" id="ajax_create_snip">ajax_create_snip</button>
+        </div>
+        <div class="row mb-3">
+            <button type="button" class="btn btn-secondary" id="ajax_delete_snip">ajax_delete_snip</button>
+        </div>
+        <div class="row mb-3">
+            <button type="button" class="btn btn-secondary" id="ajax_create_hotel">ajax_create_hotel</button>
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function () {
+        $("#ajax_create_snip").click(function () {
+            hotelAjax("ajax_create_snip.php", [{top: 10}, {left: 10}, {width: 100}, {height: 100}, {image_room_id: 1}, {image_type_id: 1}])
+        });
+    });
+    $(document).ready(function () {
+        $("#ajax_delete_snip").click(function () {
+            hotelAjax("ajax_delete_snip.php", [{id: 6}])
+        });
+    });
+    $(document).ready(function () {
+        $("#ajax_create_hotel").click(function () {
+            hotelAjax("ajax_create_hotel.php", [{name: "TEST HOTEL"}, {address: "A TEST ADDRESS"}, {url: "HTTPS://TESTURL.COM"}, {city_id: 1}])
+        });
+    });
+</script>
+
+</body>
+
+</html>
