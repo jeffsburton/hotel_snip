@@ -4,10 +4,10 @@ include_once "db.php";
 
 $params = getParams(["room_id" => True]);
 
-$sql = "SELECT image_room.id AS image_id, image_type.id AS image_type_id, COUNT(DISTINCT snip.id) AS snip_count
+$sql = "SELECT image_room.id AS image_id, image_type.id AS image_type_id, COUNT(DISTINCT area.id) AS snip_count
     FROM image_room
     INNER JOIN image_type
-    LEFT OUTER JOIN snip ON snip.image_room_id=image_room.id AND image_type.id = snip.image_type_id
+    LEFT OUTER JOIN area ON area.image_room_id=image_room.id AND image_type.id = area.image_type_id
     WHERE image_room.room_id=?
     GROUP BY image_room.id, image_type.id";
 

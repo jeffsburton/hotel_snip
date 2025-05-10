@@ -48,7 +48,6 @@
 .content-body {
     flex: 1; /* Take up the remaining space in the parent */
     overflow: hidden; /* Prevent scrollbars */
-    position: relative; /* Needed for absolute positioning of the image */
     width: 100%; /* Full width to match parent */
 
 

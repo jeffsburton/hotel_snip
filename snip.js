@@ -315,6 +315,7 @@ function completePolygon() {
         hotelAjax('ajax_create_area.php', [{'image_room_id': gImageId, 'image_type_id': gPolygons.at(-1).typeId, 'coordinates': JSON.stringify(gPolygons.at(-1).points)}]).then(response =>
         {
             gPolygons.at(-1).id = response;
+            updateSnipCountTotal(gPolygons.at(-1).typeId, 1);
             console.log(gPolygons.at(-1));
         });
     }
@@ -424,10 +425,10 @@ var gImageId = 0;
 function loadImage(imageId) {
     gImageId = imageId;
     $("#imageContainer").empty();
-    $("#imageContainer").append("<div id='targetParent' style='display:flex;justify-content;center;gap: 20px;align-items: center;flex-direction:column'/>");
-    $("#targetParent").append("<img id='targetImage' src='/show_image.php?image_id=" + imageId + "'/>");
+    $("#imageContainer").append("<div id='targetParent' style='justify-content;align-items: center;width:100%;height:100%;'/>");
+    $("#targetParent").append("<img id='targetImage' style='max-width:100%;max-height:100%;object-fit:contain' src='/show_image.php?image_id=" + imageId + "'/>");
     $("#targetParent").append("<canvas id='targetCanvas' style='position: absolute;left:0;top:0;pointer-events: all'/>");
-    $("#targetParent").append("<button id='deleteImageBtn' class='btn btn-danger delete-btn'\"'>Delete</button>");
+    //$("#targetParent").append("<button id='deleteImageBtn' class='btn btn-danger delete-btn'\"'>Delete</button>");
 
     $('#targetImage').on('load', function () {
         hotelAjax('ajax_get_snips_for_image.php', [{image_id: imageId}]).then(response => {

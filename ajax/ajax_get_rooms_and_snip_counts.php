@@ -29,12 +29,12 @@ require_once 'db.php';
 $params = getParams(["hotel_id" => True]);
 
 $sql = "
-SELECT room.id AS room_id,image_room.id AS image_id,image_type.id AS image_type_id,COUNT(snip.id) AS snip_count
+SELECT room.id AS room_id,image_room.id AS image_id,image_type.id AS image_type_id,COUNT(area.id) AS snip_count
  FROM room
     INNER JOIN image_room ON room.id=room_id
     INNER JOIN image_type
-    LEFT OUTER JOIN snip ON snip.image_room_id=image_room.id AND snip.image_type_id=image_type.id
- WHERE room.hotel_id=?
+    LEFT OUTER JOIN area ON area.image_room_id=image_room.id AND area.image_type_id=image_type.id
+ WHERE room.hotel_id=? AND room.room_type_id=2
  GROUP BY room.id, image_room.id, image_type.id
 ORDER by room.id, image_room.id, image_type.id
 ";
